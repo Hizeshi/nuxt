@@ -1,13 +1,21 @@
 <script setup lang="ts">
+import {useFilmStore} from "~/stores/film";
+import {useCategoryStore} from "~/stores/category";
 
+const categoryStore = useCategoryStore();
+const filmStore = useFilmStore()
 </script>
 
 <template>
   <div class="row mt-2">
     <div class="col-md-4">
       <select class="form-select" aria-label="Default select example">
-        <option selected>Выбор жанра</option>
-        <option value="1">One</option>
+        <option :value = "null" selected>Select genre</option>
+        <option v-for="category in categoryStore.categories"
+        :key="category.id"
+                :value="category.id">
+          {{ category.name }} {{ category.filmCount }}
+        </option>
         <option value="2">Two</option>
         <option value="3">Three</option>
       </select>
@@ -29,50 +37,54 @@
     </div>
     <div class="col-md-2">   <button type="button" class="btn btn-outline-info">Reset</button></div>
   </div>
-  <div class="row row-cols-1 row-cols-md-3 g-4 mt-2">
-    <div class="col">
+  <div v-if="!filmStore.isLoading" class="row row-cols-1 row-cols-md-3 g-4 mt-2">
+    <div class="col" v-for="film in filmStore.films" :key="film.id">
       <div class="card h-100">
-        <img src="https://avatars.mds.yandex.net/get-ott/1652588/2a000001867933df86991a0a7ae0ed78ee98/orig" class="card-img-top" alt="...">
+        <img v-if="film.link_img" :src="film.link_img" class="card-img-top" alt="...">
+        <img v-else="film.link_img" src="https://artgallerynsk.ru/upload/iblock/25c/25c5bfba434540925e36313a39c6864e.jpg" class="card-img-top" alt="...">
         <div class="card-body">
-          <h5 class="card-title">Матрица</h5>
-          <p class="card-text">4.5</p>
-          <p class="card-text">150 min</p>
-          <p class="card-text">Action, Fantastic</p>
+          <h5 class="card-title"> {{ film.name}}</h5>
+          <p class="card-text"> {{ film.raringAvg}}</p>
+          <p class="card-text"> {{ film.duration }} min.</p>
+          <p class="card-text">
+            <template v-for="(category, index) in film.categories" :key="category.id">
+              {{ category.name + (index + 1 < film.categories.length ? ", " : "") }}
+            </template>
+          </p>
         </div>
         <button type="button" class="btn btn-success">Success</button>
       </div>
     </div>
+<!--    <div class="col">-->
+<!--      <div class="card h-100">-->
+<!--        <img src="https://avatars.mds.yandex.net/i?id=5d7ddddd5551d5dd33bf4c76b9820c6e_l-9245043-images-thumbs&n=13" class="card-img-top" alt="...">-->
+<!--        <div class="card-body">-->
+<!--          <h5 class="card-title">Интерстеллар</h5>-->
+<!--          <p class="card-text">5.0</p>-->
+<!--          <p class="card-text">169 min</p>-->
+<!--          <p class="card-text">Action, Fantastic</p>-->
+<!--        </div>-->
+<!--        <button type="button" class="btn btn-success">Success</button>-->
+<!--      </div>-->
+<!--    </div>-->
     <div class="col">
       <div class="card h-100">
-        <img src="https://cdn1.ozone.ru/s3/multimedia-p/6173994253.jpg" class="card-img-top" alt="...">
+        <img src="https://avatars.mds.yandex.net/i?id=58a50c9776a77301a0b00a2390d6ce90_l-10752752-images-thumbs&n=13" class="card-img-top" alt="...">
         <div class="card-body">
-          <h5 class="card-title">Интерстеллар</h5>
-          <p class="card-text">10.0</p>
-          <p class="card-text">169 min</p>
-          <p class="card-text">Action, Fantastic</p>
+          <h5 class="card-title">Мост в Терабитию</h5>
+          <p class="card-text">4.4</p>
+          <p class="card-text">93 min</p>
+          <p class="card-text">Drama, Fantasy</p>
         </div>
         <button type="button" class="btn btn-success">Success</button>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card h-100">
-        <img src="..." class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content.</p>
-        </div>
-      </div>
-    </div>
-    <div class="col">
-      <div class="card h-100">
-        <img src="..." class="card-img-top" alt="...">
-        <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-        </div>
       </div>
     </div>
   </div>
+  <div v-else class="d-flex justify-content-center mt-4">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
   <nav class="mt-4 d-flex justify-content-center" aria-label="Page navigation example">
     <ul class="pagination">
       <li class="page-item">
