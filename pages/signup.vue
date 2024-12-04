@@ -40,7 +40,7 @@ const register = async () => {
     <div class="col-md-4"></div>
     <div class="col-md-4">
       <h1 align="center">Registration</h1>
-      <form action="" @submit.prevent="register">
+      <form @submit.prevent="register">
       <label for="fio" class="form-label">Full name</label>
         <input type="text" class="form-control" id="fio" v-model="fio">
 
