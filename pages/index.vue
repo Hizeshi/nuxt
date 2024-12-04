@@ -18,9 +18,9 @@ const filter = () => {
   filmStore.fetchFilms();
 }
 const reset = () => {
-  category.value = null
-  country.value = null
-  sort.value = 'name'
+  category.value = null;
+  country.value = null;
+  sort.value = 'name';
   filter();
 }
 const goto = (page: number) => {
@@ -31,6 +31,8 @@ const goto = (page: number) => {
     filmStore.fetchFilms();
   }
 }
+
+
 </script>
 
 <template>
@@ -84,7 +86,7 @@ const goto = (page: number) => {
             </template>
           </p>
         </div>
-        <button type="button" class="btn btn-success">Add</button>
+        <button type="button" class="btn btn-success">View</button>
       </div>
     </div>
   </div>
@@ -112,6 +114,12 @@ const goto = (page: number) => {
       </li>
     </ul>
   </nav>
+
+  <footer class="bg-dark text-white p-3 mt-3">
+    <div class="container text-center">
+      <p class="lead"> &copy; Kaliyev</p>
+    </div>
+  </footer>
 </template>
 
 <style scoped>

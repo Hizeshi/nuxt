@@ -1,3 +1,12 @@
+<script setup lang="ts">
+// import { useRouter } from 'vue-router';
+// const router = useRouter();
+//
+// const goToSignup = () => {
+//   router.push('/signup');
+// };
+
+</script>
 <template>
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
@@ -28,7 +37,7 @@
             <a class="nav-link disabled" aria-disabled="true">Disabled</a>
           </li>
         </ul>
-        <button class="btn btn-outline-success me-2" type="submit">signUp</button>
+        <button class="btn btn-outline-success me-2" type="submit" @click="$router.push('/signup')">signUp</button>
         <button type="button" class="btn btn-outline-info">SignIn</button>
       </div>
     </div>
@@ -37,6 +46,3 @@
     <slot />
   </div>
 </template>
-<script setup lang="ts">
-
-</script>
