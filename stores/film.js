@@ -3,6 +3,7 @@ import {api} from "~/api/index.js";
 
 export const useFilmStore = defineStore('film', () => {
     const films = ref([]);
+    const film = ref(null);
     const isLoading = ref(false);
     const params = ref({
         page: 1,
@@ -43,9 +44,15 @@ export const useFilmStore = defineStore('film', () => {
 
     })
 
+    const fetchFilmById = async (id) => {
+        const res = await api.get(`/films/${id}`);
+            film.value = res.data;
+    }
+
     fetchFilms();
     return {
         films,
+        film,
         isLoading,
         addCategoryToParams,
         addCountryToParams,
@@ -54,5 +61,6 @@ export const useFilmStore = defineStore('film', () => {
         countPage,
         currentPage,
         totalFilms,
+        fetchFilmById,
     }
 });

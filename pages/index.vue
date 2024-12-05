@@ -86,7 +86,7 @@ const goto = (page: number) => {
             </template>
           </p>
         </div>
-        <button type="button" class="btn btn-success">View</button>
+        <button @click="$router.push(`/film/` + film.id)" type="button" class="btn btn-success"> View </button>
       </div>
     </div>
   </div>
@@ -114,12 +114,6 @@ const goto = (page: number) => {
       </li>
     </ul>
   </nav>
-
-  <footer class="bg-dark text-white p-3 mt-3">
-    <div class="container text-center">
-      <p class="lead"> &copy; Kaliyev</p>
-    </div>
-  </footer>
 </template>
 
 <style scoped>

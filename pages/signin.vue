@@ -25,31 +25,31 @@ const login = async () => {
   <div class="row">
     <div class="col-md-4"></div>
     <div class="col-md-4">
-      <h1>Пожалуйста, войдите</h1>
+      <h1>Please login</h1>
       <form @submit.prevent="login" style="width: 22rem;">
         <div class="form-outline mb-4">
           <input v-model="email" type="email" id="email" class="form-control" required>
-          <label for="email">Адрес электронной почты</label>
+          <label for="email">Email address</label>
         </div>
 
         <div class="form-outline mb-4">
           <input v-model="password" type="password" id="password" class="form-control" required>
-          <label for="password">Пароль</label>
+          <label for="password">Password</label>
         </div>
 
         <div class="row mb-4">
           <div class="col">
             <div class="form-check">
               <input class="form-check-input" type="checkbox" id="rememberMe" checked>
-              <label class="form-check-label" for="rememberMe">Запомнить меня</label>
+              <label class="form-check-label" for="rememberMe">Remember me</label>
             </div>
           </div>
           <div class="col text-end">
-            <a href="#">Забыли пароль?</a>
+            <a href="#">Forgot your password?</a>
           </div>
         </div>
         <div>
-          <button type="submit" class="btn btn-primary btn-block mb-4">Войти</button>
+          <button type="submit" class="btn btn-primary btn-block mb-4">SignIn</button>
         </div>
         <div v-if="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
       </form>

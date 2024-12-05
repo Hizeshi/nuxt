@@ -1,93 +1,139 @@
 <script setup>
+import {useFilmStore} from "~/stores/film.js";
+import { useReviewStore } from "~/stores/review.js";
+import {useAuthStore} from "~/stores/auth.js";
 
+const filmStore = useFilmStore();
+const route = useRoute();
+const reviewStore = useReviewStore();
+const authStore = useAuthStore();
+
+filmStore.fetchFilmById(route.params.id);
+reviewStore.fetchReviewsByFilmId(route.params.id);
+const message = ref('');
+const sendReview = async () => {
+  await reviewStore.addReview({
+    film_id: route.params.id,
+    message: message.value,
+  });
+  message.value = ' ';
+  alert('Your review was added successfully');
+}
 </script>
+
 <template>
-  <div class="row">
-    <div class="col-md-2">
-      <h2> 4.8 </h2> </div>
+  <template v-if="filmStore.film">
+    <div class="row mb-custom">
+      <div class="col-md-2">
+        <h2>{{ filmStore.film.ratingAvg }}</h2>
+      </div>
       <div class="col-md-8">
-        <iframe width="750" height="450" src="https://r190110.yandexwebcache.org/sword-art-online/1/1.1080.6c0b064388d8fb67.mp4?hash1=41390d90c9a20070e57e479cfc0a0a6d&hash2=0eed7c305a9b4989e059708715e727ab"></iframe>
+        <iframe class="video-player" width="750" height="450" :src="filmStore.film.link_video" allowfullscreen></iframe>
       </div>
-        <div class="col-md-2">
-          <ul class="rating-stars">
-            <li class="star-item"><a href="" class="star-link" data-bs-toggle="tooltip" title="5"><i class="bi bi-star"></i></a></li>
-            <li class="star-item"><a href="" class="star-link" data-bs-toggle="tooltip" title="5"><i class="bi bi-star"></i></a></li>
-            <li class="star-item"><a href="" class="star-link" data-bs-toggle="tooltip" title="5"><i class="bi bi-star"></i></a></li>
-            <li class="star-item"><a href="" class="star-link" data-bs-toggle="tooltip" title="5"><i class="bi bi-star"></i></a></li>
-            <li class="star-item"><a href="" class="star-link" data-bs-toggle="tooltip" title="5"><i class="bi bi-star"></i></a></li>
-          </ul>
+      <div class="col-md-2" v-if="authStore.authData">
+        <RatingStars :film-id="filmStore.film.id"/>
       </div>
-  </div>
-
-  <div class="row">
-    <div class="col-12">
-      <h1>Matrix</h1>
     </div>
 
-    <div class="col-md-8 fs-5">
-      120 min &nbsp&nbsp&nbsp&nbsp USA 1999 &nbsp&nbsp&nbsp&nbsp 16+ &nbsp&nbsp&nbsp&nbsp 03.12.2024 &nbsp&nbsp&nbsp&nbsp Action, Fantastic &nbsp
-    </div>
-
-    <div class="col-md-4-fs-4 text-end">
-      <a href="#">Kinopoisk</a>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-10">
-        <label for="exampleFormControlTextarea1" class="form-label">Add review</label>
-        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-      </div>
-    <div class="col-md-2 d-flex flex-column-reverse">
-      <button class="btn btn-outline-success">Send</button>
-    </div>
-    </div>
-  <div class="row">
-    <div class="col-12 fs-4 mt-2">Reviews</div>
     <div class="row">
-      <div class="col">
-        <div class="row ">
-            <div class="col-md-10 fs-5 fw-bold">Ivan</div>
-            <div class="col-md-2t ext-end">04.24.2024</div>
-        </div>
-        <div class="row">
-          <div class="col fs-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti dignissimos doloremque doloribus eaque esse fugiat fugit harum inventore laboriosam molestias nemo non numquam placeat, quas quo reiciendis repudiandae sunt ut?</div>
-        </div>
+      <div class="col-md-12">
+        <h1> {{ filmStore.film.name }}</h1>
       </div>
-      <div class="col-12">
-        <hr class="border border-success border-2 opacity-50">
+
+      <div class="col-md-10 fs-5">
+       {{ filmStore.film.duration }} min &nbsp&nbsp |
+        &nbsp&nbsp {{ filmStore.film.country.name }} {{ filmStore.film.year_of_issue }}. &nbsp&nbsp |
+        &nbsp&nbsp {{ filmStore.film.age }} + &nbsp&nbsp |
+        &nbsp&nbsp {{ filmStore.film.created_at }} &nbsp&nbsp |
+        &nbsp&nbsp <template v-for="category in filmStore.film.categories" :key="category.id"> {{ category.name}} </template> &nbsp
+      </div>
+
+      <div class="col-md-2-fs-4 text-end">
+        <a href="#">Kinopoisk</a>
       </div>
     </div>
+
+    <div class="row">
+      <div class="col-md-10" v-if="authStore.authData">
+        <label for="exampleFormControlTextarea1" class="form-label" >Add review</label>
+        <textarea v-model="message" class="form-control no-resize" id="exampleFormControlTextarea1" rows="1"></textarea>
+      </div>
+      <div class="col-md-2 d-flex flex-column-reverse" v-if="authStore.authData">
+        <button class="btn btn-outline-success" @click="sendReview">Send</button>
+      </div>
+    </div>
+
+    <div class="reviews-section mt-5 p-3 bg-light rounded" >
+    <h3 class="textReviews mb-4 ">Reviews</h3>
+    <div class="review border-bottom pb-3 mb-4" v-for="review in reviewStore.reviews " :key="review.id">
+      <h4 class="text"> {{ review.user.fio}}</h4>
+      <p class="text-muted"> {{ review.message }}</p>
+      <small class="text-secondary"> {{ review.created_at }} </small>
+    </div>
+    </div>
+  </template>
+  <div v-else class="d-flex justify-content-center mt-4">
+    <div class="spinner-border" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
   </div>
+
+
+
+
+<!--  <div class="row">-->
+<!--    <div class="col-12 fs-4 mt-2">Reviews</div>-->
+<!--    <div class="row">-->
+<!--      <div class="col">-->
+<!--        <div class="row ">-->
+<!--            <div class="col-md-10 fs-5 fw-bold">Ivan</div>-->
+<!--            <div class="col-md-2t ext-end">04.24.2024</div>-->
+<!--        </div>-->
+<!--        <div class="row">-->
+<!--          <div class="col fs-6">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deleniti dignissimos doloremque doloribus eaque esse fugiat fugit harum inventore laboriosam molestias nemo non numquam placeat, quas quo reiciendis repudiandae sunt ut?</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="col-12">-->
+<!--        <hr class="border border-success border-2 opacity-50">-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+
 </template>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style scoped>
-.rating-stars {
-  list-style-type: none;
+
+template {
+  background-color: lightslategray;
 }
-.star-item {
-  font-size: 2.5rem;
+
+
+.no-resize {
+  resize: none;
 }
-.star-link {
-  color: #490495;
+
+
+
+.textReviews {
+  color: #061f98;
 }
-.star-link:hover {
-  color: #ff00cd;
+.review h4 {
+  font-size: 1.2rem;
 }
+.review p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.video-player {
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mb-custom {
+  margin-bottom: 35px;
+}
+
 </style>
