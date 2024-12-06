@@ -19,7 +19,7 @@ const register = async () => {
     return;
   }
 
-  try {
+  try { // any
     await authStore.signup({
       fio: fio.value,
       email: email.value,
@@ -41,7 +41,7 @@ const register = async () => {
     <div class="col-md-4">
       <h1 align="center">Registration</h1>
       <form @submit.prevent="register">
-      <label for="fio" class="form-label">Full name</label>
+        <label for="fio" class="form-label">Full name</label>
         <input type="text" class="form-control" id="fio" v-model="fio">
 
         <div class="mb-3">

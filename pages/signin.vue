@@ -9,7 +9,7 @@ const authStore = useAuthStore();
 const router = useRouter();
 const errorMessage = ref('');
 
-const login = async () => {
+const login = async () => { // any
   try {
     await authStore.signin({
       email: email.value,
@@ -56,4 +56,3 @@ const login = async () => {
     </div>
   </div>
 </template>
-

@@ -46,7 +46,7 @@ export const useFilmStore = defineStore('film', () => {
 
     const fetchFilmById = async (id) => {
         const res = await api.get(`/films/${id}`);
-            film.value = res.data;
+        film.value = res.data;
     }
 
     fetchFilms();

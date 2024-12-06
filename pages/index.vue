@@ -66,14 +66,14 @@ const goto = (page: number) => {
       </select>
     </div>
     <div class="col-md-2">
-      <button type="button" class="btn btn-outline-info" @click="reset">Reset</button>
+      <button type="button" class="btn btn-outline-danger" @click="reset">Reset</button>
     </div>
   </div>
   <div v-if="!filmStore.isLoading" class="row row-cols-1 row-cols-md-3 g-4 mt-2">
     <div class="col" v-for="film in filmStore.films" :key="film.id">
       <div class="card h-100">
         <img v-if="film.link_img" :src="film.link_img" class="card-img-top" alt="">
-        <img v-else="film.link_img" src="https://png.klev.club/uploads/posts/2024-04/png-klev-club-wia5-p-uolter-uait-png-20.png"
+        <img v-else="film.link_img" src="https://m.media-amazon.com/images/I/71KPnecVSNL._SL1108_.jpg"
              class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title"> {{ film.name }}</h5>
